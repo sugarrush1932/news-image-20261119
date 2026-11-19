@@ -253,7 +253,11 @@ def main():
     h3_f = font(SERIF_B, 26)
     d3_f = font(SANS, 19)
     d.text((MX, ty), "MARKETS - ARTIFICIAL INTELLIGENCE", font=k_f, fill=GOLD)
-    d.text((MX, ty + 26), "ANTHROPIC'S RECORD DEBUT", font=h3_f, fill=PAPER)
+    # fitted to the column width: at 26pt this headline measures ~465px and
+    # runs into the centre rule; fit() steps it down until it sits inside
+    # colw with clear air before the divider
+    ant_f = fit(SERIF_B, 26, "ANTHROPIC'S RECORD DEBUT", colw)
+    d.text((MX, ty + 26), "ANTHROPIC'S RECORD DEBUT", font=ant_f, fill=PAPER)
     yy = ty + 66
     for line in wrap(d, "The AI lab starts trading on Nasdaq today after "
                         "an $81.3bn IPO, the largest on record.", d3_f, colw):
