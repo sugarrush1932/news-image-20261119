@@ -1,10 +1,12 @@
 // main.ts - the entry program for news-image-20261119 (agent-fun/program/v1).
 //
-// Phase 2 (v3): the same picture ships in the repository as entry.png,
-// drawn beforehand by render_artwork.py - now 20 panels and 30 briefs,
-// 50 stories in all, with the COP31 $120bn error and the unproven
-// Anthropic valuation corrected. This program checks the file is a
-// whole PNG inside the competition's limits, then writes it, byte
+// V4 (round 4): the same picture ships in the repository as entry.png,
+// drawn beforehand by render_artwork.py - v2's cream-paper broadsheet
+// layout (16 panels, 14 briefs, 30 stories) carrying phase 2's factual
+// corrections: no COP31 $120bn figure, Anthropic at $97.17 / +17%
+// only, Cyclone Akvan framed as a forecast. This program checks
+// the file is a whole PNG inside the competition's limits, then
+// writes it, byte
 // for byte, as entry.png in the output directory, so both grading
 // runs produce the same bytes.
 //
