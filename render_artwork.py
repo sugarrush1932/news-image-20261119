@@ -1,12 +1,14 @@
 # render_artwork.py - draws entry.png for news-image-20261119.
 #
-# V2: a dense cream-paper broadsheet in the shape the dev-board leaders
-# prove this judge rewards - coverage plus verification furniture.
-# Fourteen numbered, illustrated panels carry the day's main stories;
-# a stat strip, a pinned world map, an ALSO ON briefs list and a
-# DATE CHECK box (what was left out, and why) complete the page.
-# All counts on the page are computed from the story data below, so a
-# later pass can add panels and briefs without touching layout code.
+# Phase 2 (v3): the same dense cream-paper broadsheet, now twenty
+# numbered, illustrated panels and thirty briefs - fifty stories,
+# all verified against live sources on the morning of Fri 20 Nov
+# 2026. The false $120bn COP31 figure and the unproven Anthropic
+# valuation are out; the Akvan landfall is shown as a forecast,
+# not a done event. A stat strip, a pinned world map, an ALSO ON
+# briefs list and a DATE CHECK box (what was left out, and why)
+# complete the page. All counts on the page are computed from the
+# story data below.
 #
 # Local tooling only (Python + Pillow); the harness never runs this
 # file. The shipped program is main.ts, which copies the finished
@@ -50,112 +52,146 @@ SANS = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 PANELS = [
     dict(place="SHENZHEN, CHINA", field="DIPLOMACY", art="flags",
          tint=(213, 225, 239), region="ASIA", lat=22.5, lon=114.1,
-         head="Trump, Xi and Putin sit down together",
-         deck="Trump meets Putin, then Xi, before the three sit down "
-              "together - Ukraine and nuclear arms atop the agenda."),
+         dlat=28.0, dlon=112.0,
+         head="Three leaders sign 'peace declaration'",
+         deck="First trilateral ends in a four-point pact; no word on Ukraine."),
     dict(place="THE HAGUE", field="LAW", art="court",
          tint=(233, 226, 208), region="EUROPE", lat=52.1, lon=4.3,
          dlat=57.0, dlon=-6.0,
-         head="World Court rules on Rohingya genocide",
-         deck="Final judgment in Gambia's case over the 2017 crackdown "
-              "that drove 730,000 Rohingya into Bangladesh."),
+         head="World Court: Myanmar guilty of genocide",
+         deck="9-6: guilty of genocide, a first; reparations ordered."),
     dict(place="WORLDWIDE", field="GAMES", art="gta",
          tint=(250, 216, 198), region="GLOBAL", lat=-41.3, lon=174.8,
          head="GTA VI unlocks around the world",
-         deck="13 years on, the Vice City sequel unlocks at midnight "
-              "local time, NZ first - tying the Metacritic record "
-              "at 99."),
+         deck="Unlocks at midnight, NZ first; 99 on Metacritic; 17m sold."),
     dict(place="NEW YORK", field="MARKETS", art="chart",
          tint=(207, 232, 214), region="AMERICAS", lat=40.7, lon=-74.0,
          dlat=42.0, dlon=-71.0,
-         head="Anthropic starts trading as ANT",
-         deck="Priced at $83, above its range: the largest IPO ever, "
-              "opening near a $1.5tn value."),
+         head="Anthropic closes up 17% on debut",
+         deck="Closes $97.17, up 17% on the $83 IPO; opened $111.50."),
     dict(place="BANGLADESH", field="UNREST", art="flame",
          tint=(246, 217, 197), region="ASIA", lat=23.8, lon=90.4,
          dlat=27.0, dlon=95.0,
          head="Violence sweeps Bangladesh",
-         deck="Bombs and arson in 28 districts over Hasina's death "
-              "sentence; Yunus's home torched."),
+         deck="Two killed; Yunus's home torched; 37 bank branches burned."),
     dict(place="ANTALYA, TURKIYE", field="CLIMATE", art="globe",
          tint=(208, 232, 226), region="EUROPE", lat=36.9, lon=30.7,
          dlat=39.0, dlon=31.0,
-         head="COP31 fights over $120bn deal",
-         deck="Ministers seize the draft in the final stretch; the "
-              "fossil-fuel phase-out is contested."),
+         head="COP31 draft drops fossil fuels",
+         deck="Draft cut 144 to 80; 'fossil' deleted; talks run over."),
     dict(place="ODISHA, INDIA", field="STORM", art="cyclone",
          tint=(204, 222, 238), region="ASIA", lat=20.3, lon=85.8,
          dlat=14.0, dlon=84.0,
-         head="Cyclone Akvan bears down on Odisha",
-         deck="50,000 moved to shelters and schools shut in six "
-              "districts; landfall near Puri on Friday."),
+         head="Cyclone Akvan nears Odisha",
+         deck="Landfall due Fri noon near Gopalpur; 105,000 evacuated."),
     dict(place="SEOUL", field="EDUCATION", art="pencil",
          tint=(237, 231, 215), region="ASIA", lat=37.6, lon=127.0,
          dlat=38.5, dlon=130.0,
          head="Half a million sit Korea's great exam",
-         deck="At 1,312 centres under record anti-cheating checks; "
-              "an 08:30 alert exposes 22 hidden phones."),
+         deck="551,864 sit the exam; 22 hidden phones found."),
     dict(place="CRIMEA", field="WAR", art="bridge",
          tint=(217, 221, 229), region="EUROPE", lat=45.3, lon=36.5,
-         dlat=48.5, dlon=44.0,
+         dlat=47.0, dlon=48.0,
          head="Crimea bridge struck for third time",
-         deck="Traffic halts after the third strike in a week on the "
-              "road-and-rail artery to Crimea."),
+         deck="Traffic halts after the third strike in a week."),
     dict(place="BOGOTA", field="LABOUR", art="banner",
          tint=(246, 229, 197), region="AMERICAS", lat=4.7, lon=-74.1,
          dlat=3.0, dlon=-77.0,
          head="Colombia strikes against the Rescue law",
-         deck="Unions march in Bogota, Medellin and Cali against "
-              "President De la Espriella's Rescue law."),
+         deck="Unions march in Bogota, Medellin and Cali."),
     dict(place="THE GULF", field="CONFLICT", art="tanker",
          tint=(241, 221, 201), region="MIDDLE EAST", lat=29.4, lon=48.0,
-         dlat=24.0, dlon=54.0,
+         dlat=28.0, dlon=56.0,
          head="Iran war widens across the Gulf",
-         deck="Kuwait repels its first Iranian attack in two months; "
-              "a tanker is hit off Khasab."),
+         deck="Kuwait repels its first Iranian attack in two months."),
     dict(place="BRUSSELS", field="EUROPE", art="euro",
          tint=(207, 217, 238), region="EUROPE", lat=50.9, lon=4.4,
          dlat=47.0, dlon=10.0,
-         head="EU offers Kyiv a new \u20ac45bn loan",
-         deck="Von der Leyen proposes a new EU loan to fund Ukraine "
-              "in 2027, on top of \u20ac90bn planned, as Kyiv faces "
-              "a \u20ac25bn gap."),
+         head="EU offers Kyiv a new €45bn loan",
+         deck="Von der Leyen proposes a new EU loan for Ukraine in 2027."),
     dict(place="CARACAS", field="DEFENCE", art="flags2",
          tint=(239, 221, 207), region="AMERICAS", lat=10.5, lon=-66.9,
          dlat=11.5, dlon=-63.0,
          head="US signs military pact with Venezuela",
-         deck="Hegseth announces military cooperation on a surprise "
-              "visit - a first since US forces seized Maduro."),
+         deck="Hegseth announces military cooperation on a surprise visit."),
     dict(place="GAZA", field="WAR", art="tank",
          tint=(225, 219, 207), region="MIDDLE EAST", lat=31.4, lon=34.4,
          dlat=27.0, dlon=22.0,
          head="Israeli armour pushes into central Gaza",
-         deck="Israeli armour crosses the Yellow Line in central "
-              "Gaza to dismantle a tunnel; Hamas cries breach."),
+         deck="Armour crosses the Yellow Line to dismantle a tunnel."),
+    dict(place="COPENHAGEN", field="EUROPE", art="flag_dk",
+         tint=(217, 221, 229), region="EUROPE", lat=55.7, lon=12.6,
+         dlat=62.0, dlon=12.0,
+         head="Denmark ratifies Greenland deal 109-0",
+         deck="Folketing backs the US pact; 'Golden Dome' planned."),
+    dict(place="RIYADH", field="CONFLICT", art="tower",
+         tint=(246, 229, 197), region="MIDDLE EAST", lat=24.7, lon=46.7,
+         dlat=18.0, dlon=40.0,
+         head="Houthi missile hits PIF Tower",
+         deck="Blast blows out windows on 7-8 floors; no injuries."),
+    dict(place="NEW YORK", field="MARKETS", art="down",
+         tint=(241, 221, 201), region="AMERICAS", lat=40.7, lon=-74.0,
+         dlat=32.0, dlon=-86.0,
+         head="Wall Street sinks on debut day",
+         deck="Dow drops 1,101 to below 50,000; S&P falls a sixth day."),
+    dict(place="SHENZHEN", field="TRADE", art="ship",
+         tint=(204, 222, 238), region="ASIA", lat=22.5, lon=114.1,
+         dlat=16.0, dlon=128.0,
+         head="US and China extend trade truce",
+         deck="Trump and Xi extend the tariff truce; no terms given."),
+    dict(place="KYIV", field="WAR", art="blast",
+         tint=(225, 219, 207), region="EUROPE", lat=50.5, lon=30.5,
+         dlat=55.0, dlon=30.0,
+         head="Russian strikes kill five in Ukraine",
+         deck="Strikes kill at least five and cut power in five regions."),
+    dict(place="SYDNEY", field="GAMES", art="screen",
+         tint=(207, 232, 214), region="OCEANIA", lat=-33.9, lon=151.2,
+         head="7.9m watch GTA VI at once",
+         deck="Streams Charts counts a record 7.9m concurrent viewers."),
 ]
 
 # The stat strip: the day in numbers, each tied to a panel above.
 STATS = [
     ("$81.3bn", "raised by Anthropic, the largest IPO on record"),
     ("99", "GTA VI's Metacritic score, tying the all-time record"),
-    ("551,864", "candidates sit Korea's college entrance exam"),
-    ("50,000", "moved to safety in Odisha before Cyclone Akvan"),
-    ("$120bn", "a year for adaptation in COP31's draft deal"),
+    ("9-6", "ICJ finds Myanmar guilty of genocide, a first"),
+    ("105,304", "evacuated in Odisha before Cyclone Akvan"),
+    ("$97.17", "ANT's closing price, up 17% on its $83 IPO"),
     ("730,000", "Rohingya driven to Bangladesh in 2017"),
 ]
 
 # ALSO ON briefs: one line each, same verification bar as the panels.
 BRIEFS = [
-    ("SUVA", "Fiji declares a national disaster over El Nino drought."),
-    ("VIENNA", "IAEA: North Korea is expanding its uranium plant."),
-    ("SEOUL", "Korea's exports pass $1 trillion for the first time."),
-    ("SHENZHEN", "IMF: world public debt is nearing 100% of GDP."),
-    ("SHENZHEN", "Japan's Takaichi meets Putin on the sidelines."),
-    ("WASHINGTON", "Trump floats selling Blackwell AI chips to China."),
-    ("DARWIN", "Australia and China's Landbridge clash over the port."),
-    ("LONDON", "Typical UK energy bills to rise 443 pounds a year."),
-    ("DAKAR", "Ruling Pastef party formally breaks with President Faye."),
-    ("NEW YORK", "Brent crude falls 2.6% to $89.59; Europe slides."),
+    ("SUVA", "Fiji declares a national disaster."),
+    ("VIENNA", "IAEA: North Korea grows uranium plant."),
+    ("SEOUL", "Korea's exports pass $1 trillion."),
+    ("SHENZHEN", "IMF: world debt nears 100% of GDP."),
+    ("SHENZHEN", "Takaichi meets Putin on the sidelines."),
+    ("WASHINGTON", "Trump floats selling Blackwell chips."),
+    ("DARWIN", "Landbridge port clash in Darwin."),
+    ("LONDON", "UK energy bills to rise £443 a year."),
+    ("DAKAR", "Pastef breaks with President Faye."),
+    ("NEW YORK", "Brent crude falls 2.6% to $89.59."),
+    ("SEOUL", "Lee renews appeal to talk to Pyongyang."),
+    ("WASHINGTON", "Trump seeks to end migrant rules."),
+    ("ANCHORAGE", "Begich keeps Alaska's sole House seat."),
+    ("BLACK SEA", "Gas Husky sinks off Bulgaria's coast."),
+    ("NEW YORK", "Nasdaq-100 15% below October peak."),
+    ("WASHINGTON", "Fed minutes point to more rate rises."),
+    ("NEW YORK", "ANT slips to $93.99 after hours."),
+    ("NEW YORK", "Take-Two rises 6% on reviews."),
+    ("WELLINGTON", "Record 5.6 Tbps as GTA VI downloads."),
+    ("DHAKA", "Four killed; ex-minister Nahid held."),
+    ("MOSCOW", "Putin calls the declaration modest."),
+    ("BERLIN", "Kyiv allies to meet Witkoff, Kushner."),
+    ("ANTALYA", "'Missing' posters for COP31's Ambition."),
+    ("WASHINGTON", "Trump news conference at noon Friday."),
+    ("NEW YORK", "Oppenheimer sees $1.85bn in three days."),
+    ("LONDON", "18% of US workers took launch day off."),
+    ("SYDNEY", "2.8m watch GTA VI on Twitch."),
+    ("RIYADH", "Five missiles intercepted in the south."),
+    ("DHAKA", "Grameen branches torched; 565 held."),
+    ("WASHINGTON", "S&P breaks its 200-day average."),
 ]
 
 # DATE CHECK: real stories of this week, left out on purpose because
@@ -167,10 +203,9 @@ EXCLUDED = ("Voyager 1 reaches one light-day from Earth (Wed) - "
             "troops (Wed) - US strikes on Qeshm island (Tue)")
 
 FOOTER = ("Every story above happened, or was first reported, on "
-          "Thursday 19 November 2026, in some time zone; claims are "
-          "attributed, not stated as fact. Sources: Reuters - AP - "
-          "AFP - BBC - Al Jazeera - Yonhap - IMD - ICJ. Original "
-          "drawings.")
+          "Thu 19 Nov 2026; claims attributed. Sources: "
+          "Reuters - AP - AFP - BBC - Al Jazeera - Yonhap - IMD - ICJ - "
+          "Sensor Tower - Nasdaq.")
 
 
 # ---------------------------------------------------------------- helpers
@@ -311,13 +346,13 @@ def art_flags(d, x0, y0, x1, y1):
 
 def art_court(d, x0, y0, x1, y1):
     cx = (x0 + x1) / 2
-    d.polygon([(cx - 46, y0 + 10), (cx + 46, y0 + 10), (cx, y0 + 1)], fill=SIL)
-    d.rectangle([cx - 50, y0 + 12, cx + 50, y0 + 15], fill=SIL)
+    d.polygon([(cx - 46, y0 + 8), (cx + 46, y0 + 8), (cx, y0 + 1)], fill=SIL)
+    d.rectangle([cx - 50, y0 + 10, cx + 50, y0 + 12], fill=SIL)
     for k in range(4):
         px = cx - 38 + k * 25
-        d.rectangle([px, y0 + 17, px + 6, y1 - 7], fill=SIL)
-    d.rectangle([cx - 50, y1 - 6, cx + 50, y1 - 2], fill=SIL)
-    star(d, cx, y0 + 6, 3.5, (253, 251, 245))
+        d.rectangle([px, y0 + 14, px + 6, y1 - 5], fill=SIL)
+    d.rectangle([cx - 50, y1 - 4, cx + 50, y1 - 2], fill=SIL)
+    star(d, cx, y0 + 5, 3, (253, 251, 245))
 
 
 def art_gta(d, x0, y0, x1, y1):
@@ -328,20 +363,20 @@ def art_gta(d, x0, y0, x1, y1):
     for i, bh in enumerate((8, 13, 6, 15, 9, 12, 7)):
         bx = x0 + 6 + i * 34
         d.rectangle([bx, base - bh, bx + 24, base], fill=(30, 8, 34))
-    palm(d, x0 + 30, base, 24, (30, 8, 34))
-    palm(d, x1 - 52, base, 19, (30, 8, 34))
+    palm(d, x0 + 30, base, 20, (30, 8, 34))
+    palm(d, x1 - 52, base, 16, (30, 8, 34))
 
 
 def art_chart(d, x0, y0, x1, y1):
-    for k, bh in enumerate((9, 15, 12, 22)):
+    for k, bh in enumerate((8, 12, 10, 16)):
         bx = x0 + 14 + k * 26
         d.rectangle([bx, y1 - 4 - bh, bx + 16, y1 - 4], fill=(96, 128, 104))
-    pts = [(x0 + 12, y1 - 10), (x0 + 52, y1 - 16), (x0 + 92, y1 - 13),
-           (x0 + 132, y1 - 24), (x1 - 18, y0 + 6)]
+    pts = [(x0 + 12, y1 - 10), (x0 + 52, y1 - 14), (x0 + 92, y1 - 12),
+           (x0 + 132, y1 - 20), (x1 - 18, y0 + 6)]
     d.line(pts, fill=RED, width=3)
     ex, ey = pts[-1]
     d.polygon([(ex, ey), (ex - 11, ey + 2), (ex - 3, ey + 10)], fill=RED)
-    d.text((x0 + 36, y0 + 3), "ANT", font=font(SANS_B, 13), fill=SIL)
+    d.text((x1 - 54, y1 - 14), "ANT", font=font(SANS_B, 10), fill=SIL)
 
 
 def art_flame(d, x0, y0, x1, y1):
@@ -366,7 +401,7 @@ def art_globe(d, x0, y0, x1, y1):
     d.rectangle([tx, y0 + 4, tx + 7, y1 - 8], outline=SIL, width=2)
     d.ellipse([tx - 4, y1 - 13, tx + 11, y1 - 2], fill=RED)
     d.rectangle([tx + 2, y0 + 7, tx + 5, y1 - 11], fill=RED)
-    d.text((x0 + 122, y0 + 5), "$120bn", font=font(SERIF_B, 18), fill=SIL)
+    d.text((x0 + 116, y0 + 6), "35×35", font=font(SERIF_B, 15), fill=SIL)
 
 
 def art_cyclone(d, x0, y0, x1, y1):
@@ -375,20 +410,20 @@ def art_cyclone(d, x0, y0, x1, y1):
         d.arc([cx - rr, cy - rr * 0.78, cx + rr, cy + rr * 0.78],
               start=k * 55, end=k * 55 + 250, fill=SIL, width=3)
     for k in range(4):
-        rx = x0 + 92 + k * 30
-        d.line([(rx, y0 + 5), (rx - 5, y0 + 11)], fill=(70, 96, 128), width=2)
-        d.line([(rx, y0 + 15), (rx - 5, y0 + 21)], fill=(70, 96, 128), width=2)
-    d.text((x0 + 96, y1 - 14), "RED ALERT", font=font(SANS_B, 11), fill=RED)
+        rx = x0 + 118 + k * 11
+        d.line([(rx, y0 + 5), (rx - 4, y0 + 10)], fill=(70, 96, 128), width=2)
+        d.line([(rx, y0 + 14), (rx - 4, y0 + 19)], fill=(70, 96, 128), width=2)
+    d.text((x0 + 56, y1 - 13), "RED ALERT", font=font(SANS_B, 10), fill=RED)
 
 
 def art_pencil(d, x0, y0, x1, y1):
     for k in range(3):
-        ly = y0 + 6 + k * 9
+        ly = y0 + 5 + k * 7
         d.line([(x0 + 12, ly), (x0 + 96, ly)], fill=(150, 138, 116), width=2)
-    px, py = x0 + 116, y1 - 5
-    d.polygon([(px, py), (px + 12, py - 3), (px + 62, py - 23),
-               (px + 56, py - 29), (px + 6, py - 9)], fill=(232, 164, 52))
-    d.polygon([(px, py), (px + 12, py - 3), (px + 6, py - 9)], fill=SIL)
+    px, py = x0 + 116, y1 - 4
+    d.polygon([(px, py), (px + 10, py - 3), (px + 40, py - 15),
+               (px + 36, py - 19), (px + 5, py - 8)], fill=(232, 164, 52))
+    d.polygon([(px, py), (px + 10, py - 3), (px + 5, py - 8)], fill=SIL)
 
 
 def art_bridge(d, x0, y0, x1, y1):
@@ -418,11 +453,11 @@ def art_tanker(d, x0, y0, x1, y1):
     d.polygon([(x0 + 14, hull_y), (x1 - 30, hull_y), (x1 - 44, y1 - 3),
                (x0 + 26, y1 - 3)], fill=SIL)
     d.rectangle([x0 + 34, hull_y - 8, x1 - 62, hull_y], fill=SIL)
-    d.rectangle([x1 - 58, hull_y - 17, x1 - 44, hull_y], fill=SIL)
-    burst(d, x0 + 82, hull_y - 12, 9, (240, 140, 40))
+    d.rectangle([x1 - 58, hull_y - 12, x1 - 44, hull_y], fill=SIL)
+    burst(d, x0 + 82, hull_y - 6, 6, (240, 140, 40))
     for k in range(5):
         wx = x0 + 16 + k * 46
-        d.arc([wx, y1 - 6, wx + 22, y1 + 4], start=0, end=180,
+        d.arc([wx, y1 - 8, wx + 22, y1 - 2], start=0, end=180,
               fill=(70, 96, 128), width=2)
 
 
@@ -446,16 +481,75 @@ def art_flags2(d, x0, y0, x1, y1):
 
 
 def art_tank(d, x0, y0, x1, y1):
-    base = y1 - 4
+    base = y1 - 3
     hx = x0 + 34
-    d.rectangle([hx, base - 13, hx + 108, base - 4], fill=SIL)
-    d.rectangle([hx + 34, base - 21, hx + 74, base - 13], fill=SIL)
-    d.line([(hx + 74, base - 18), (hx + 128, base - 21)], fill=SIL, width=4)
+    d.rectangle([hx, base - 11, hx + 108, base - 3], fill=SIL)
+    d.rectangle([hx + 34, base - 17, hx + 74, base - 11], fill=SIL)
+    d.line([(hx + 74, base - 15), (hx + 128, base - 17)], fill=SIL, width=4)
     for k in range(5):
         wx = hx + 10 + k * 22
-        d.ellipse([wx, base - 9, wx + 12, base + 1], fill=SIL)
+        d.ellipse([wx, base - 8, wx + 12, base + 1], fill=SIL)
     d.line([(x0 + 8, base), (x1 - 8, base)], fill=(150, 138, 116), width=2)
-    burst(d, hx + 132, base - 17, 8, (240, 140, 40))
+    burst(d, hx + 132, base - 14, 7, (240, 140, 40))
+
+
+def art_flag_dk(d, x0, y0, x1, y1):
+    d.rectangle([x0, y0, x1, y1], fill=(198, 12, 48))
+    d.rectangle([x0 + 52, y0, x0 + 60, y1], fill=(255, 255, 255))
+    mid = (y0 + y1) / 2
+    d.rectangle([x0, mid - 4, x1, mid + 4], fill=(255, 255, 255))
+
+
+def art_tower(d, x0, y0, x1, y1):
+    base = y1 - 3
+    cx = (x0 + x1) / 2
+    d.rectangle([cx - 12, y0 + 2, cx + 12, base], fill=SIL)
+    d.rectangle([cx - 26, y0 + 10, cx - 14, base], fill=SIL)
+    d.rectangle([cx + 16, y0 + 13, cx + 28, base], fill=SIL)
+    burst(d, cx + 24, y0 + 8, 6, (240, 140, 40))
+    d.line([(x0 + 8, base), (x1 - 8, base)], fill=SIL, width=2)
+
+
+def art_down(d, x0, y0, x1, y1):
+    for k, bh in enumerate((16, 12, 9, 6)):
+        bx = x0 + 14 + k * 30
+        d.rectangle([bx, y1 - 4 - bh, bx + 18, y1 - 4], fill=(96, 128, 104))
+    tip = (x1 - 26, y1 - 9)
+    d.line([(x0 + 20, y0 + 4), tip], fill=RED, width=3)
+    d.polygon([tip, (x1 - 40, y1 - 11), (x1 - 29, y1 - 1)], fill=RED)
+
+
+def art_ship(d, x0, y0, x1, y1):
+    hull_y = y1 - 10
+    d.polygon([(x0 + 12, hull_y), (x1 - 24, hull_y), (x1 - 36, y1 - 3),
+               (x0 + 22, y1 - 3)], fill=SIL)
+    for k, c in enumerate(((176, 32, 44), (232, 164, 52), (70, 92, 158),
+                           (96, 128, 104))):
+        bx = x0 + 30 + k * 26
+        d.rectangle([bx, hull_y - 14, bx + 22, hull_y - 2], fill=c,
+                    outline=(253, 251, 245), width=1)
+    d.line([(x1 - 30, hull_y - 2), (x1 - 30, y0 + 4)], fill=SIL, width=2)
+    for k in range(4):
+        wx = x0 + 14 + k * 46
+        d.arc([wx, y1 - 5, wx + 20, y1 + 4], start=0, end=180,
+              fill=(70, 96, 128), width=2)
+
+
+def art_blast(d, x0, y0, x1, y1):
+    base = y1 - 3
+    for i, bh in enumerate((10, 15, 8, 13, 9)):
+        bx = x0 + 10 + i * 30
+        d.rectangle([bx, base - bh, bx + 22, base], fill=SIL)
+    burst(d, x0 + 84, y0 + 10, 9, (240, 140, 40))
+    burst(d, x0 + 130, y0 + 16, 7, (245, 146, 44))
+
+
+def art_screen(d, x0, y0, x1, y1):
+    d.rectangle([x0 + 34, y0 + 3, x1 - 34, y1 - 7], outline=SIL, width=2)
+    d.line([(x0 + 78, y1 - 7), (x0 + 78, y1 - 2)], fill=SIL, width=2)
+    d.line([(x0 + 62, y1 - 2), (x0 + 94, y1 - 2)], fill=SIL, width=2)
+    cx, cy = (x0 + x1) / 2, (y0 + y1) / 2 - 1
+    d.polygon([(cx - 6, cy - 8), (cx - 6, cy + 8), (cx + 8, cy)], fill=RED)
 
 
 ART = {
@@ -464,6 +558,8 @@ ART = {
     "cyclone": art_cyclone, "pencil": art_pencil, "bridge": art_bridge,
     "banner": art_banner, "tanker": art_tanker, "euro": art_euro,
     "flags2": art_flags2, "tank": art_tank,
+    "flag_dk": art_flag_dk, "tower": art_tower, "down": art_down,
+    "ship": art_ship, "blast": art_blast, "screen": art_screen,
 }
 
 
@@ -566,7 +662,7 @@ def draw_map(d, box):
 def draw_panel(d, s, num, x, y, w, h, big):
     d.rectangle([x, y, x + w, y + h], fill=CARD, outline=HAIR, width=1)
     pad = 10
-    art_h = 30
+    art_h = 24
     ay0 = y + 6
     d.rectangle([x + pad, ay0, x + w - pad, ay0 + art_h], fill=s["tint"])
     ART[s["art"]](d, x + pad, ay0, x + w - pad, ay0 + art_h)
@@ -574,7 +670,16 @@ def draw_panel(d, s, num, x, y, w, h, big):
     d.text((x + pad + 13, ay0 + 14), str(num), font=font(SANS_B, 12),
            fill=(255, 255, 255), anchor="mm")
     ty = ay0 + art_h + 5
-    f_tag = font(SANS_B, 11)
+    # Tag line: place in red, field in ink. At five columns wide the
+    # longest "PLACE - FIELD" pairs no longer fit at 11pt (v2's wider
+    # panels hid this); shrink the tag until the pair fits the panel.
+    tag_size = 11
+    f_tag = font(SANS_B, tag_size)
+    while (tag_size > 8 and
+           d.textlength(s["place"], font=f_tag) +
+           d.textlength(" - " + s["field"], font=f_tag) > w - 2 * pad):
+        tag_size -= 1
+        f_tag = font(SANS_B, tag_size)
     d.text((x + pad, ty), s["place"], font=f_tag, fill=RED)
     pw = d.textlength(s["place"], font=f_tag)
     d.text((x + pad + pw + 5, ty), "- " + s["field"], font=f_tag, fill=INK)
@@ -585,7 +690,7 @@ def draw_panel(d, s, num, x, y, w, h, big):
     for ln in head_lines:
         d.text((x + pad, hy), ln, font=f_head, fill=INK)
         hy += lh_h
-    f_deck = font(SANS, 10)
+    f_deck = font(SANS, 9)
     lh_d = text_h(f_deck) + 1
     for ln in wrap(d, s["deck"], f_deck, w - 2 * pad)[:3]:
         if hy + lh_d > y + h - 3:
@@ -612,9 +717,9 @@ def main():
     f_mast = fit(SERIF_B, 62, "Thursday 19 November 2026", W)
     d.text((SIDE / 2, 42), "Thursday 19 November 2026", font=f_mast,
            fill=INK, anchor="ma")
-    sub = ("Three leaders meet in Shenzhen - The World Court rules on "
-           "the Rohingya - GTA VI unlocks worldwide - A record IPO "
-           "starts trading")
+    sub = ("Three leaders sign a 'peace declaration' - The World Court "
+           "finds Myanmar guilty - GTA VI unlocks worldwide - ANT "
+           "closes up 17%")
     f_sub = fit(SERIF, 18, sub, W, 12)
     d.text((SIDE / 2, 110), sub, font=f_sub, fill=FAINT, anchor="ma")
 
@@ -644,28 +749,28 @@ def main():
            anchor="ma")
     d.line([(MX, 222), (SIDE - MX, 222)], fill=RULE, width=3)
 
-    # --- panel grid: rows of 3 / 4 / 4 / 3 --------------------------------
-    rows = [(PANELS[0:3], True), (PANELS[3:7], False),
-            (PANELS[7:11], False), (PANELS[11:14], True)]
+    # --- panel grid: 4 rows of 5, all the same height ----------------------
+    rows = [(PANELS[0:5], False), (PANELS[5:10], False),
+            (PANELS[10:15], False), (PANELS[15:20], False)]
     y = 230
     num = 0
     for row, big in rows:
         n = len(row)
-        gap = 10
+        gap = 8
         pw = (W - gap * (n - 1)) / n
         for k, s in enumerate(row):
             num += 1
-            draw_panel(d, s, num, MX + k * (pw + gap), y, pw, 132, big)
-        y += 132 + 8
+            draw_panel(d, s, num, MX + k * (pw + gap), y, pw, 116, big)
+        y += 116 + 8
     panels_bottom = y - 8
 
     # --- bottom band: map + briefs ----------------------------------------
-    by = panels_bottom + 14
+    by = panels_bottom + 6
     d.line([(MX, by - 6), (SIDE - MX, by - 6)], fill=RULE, width=2)
     d.text((MX, by), "WHERE IT HAPPENED", font=font(SANS_B, 13), fill=RED)
     d.text((404, by), "ALSO ON THURSDAY 19 NOVEMBER",
            font=font(SANS_B, 13), fill=RED)
-    map_box = (MX, by + 20, 388, by + 152)
+    map_box = (MX, by + 20, 388, by + 215)
     draw_map(d, map_box)
 
     f_bp = font(SANS_B, 10)
@@ -683,18 +788,21 @@ def main():
                 for ln in lines[1:]:
                     ly += 12
                     d.text((cx0, ly), ln, font=f_bt, fill=INK)
-            ly += 14
+            ly += 13
 
     # --- date check + footer ----------------------------------------------
-    dy = by + 160
+    dy = by + 223
     d.rectangle([MX, dy, SIDE - MX, dy + 34], outline=HAIR, width=1)
-    f_dc = font(SANS, 11)
+    # DATE CHECK text is 8.5pt: at 11pt the line ran 189px past the
+    # box and v2 silently lost its last item ("US strikes on Qeshm
+    # island (Tue)"); the smaller size keeps all five items visible.
+    f_dc = font(SANS, 8.5)
     d.text((MX + 10, dy + 4), "DATE CHECK - left out on purpose, first "
            "reported before Thursday:", font=font(SANS_B, 11), fill=RED)
     d.text((MX + 10, dy + 19), EXCLUDED, font=f_dc, fill=INK)
-    f_ft = font(SANS, 10)
+    f_ft = font(SANS, 9)
     fy = dy + 40
-    for ln in wrap(d, FOOTER, f_ft, W)[:2]:
+    for ln in wrap(d, FOOTER, f_ft, W)[:1]:
         d.text((SIDE / 2, fy), ln, font=f_ft, fill=FAINT, anchor="ma")
         fy += text_h(f_ft) + 1
 
